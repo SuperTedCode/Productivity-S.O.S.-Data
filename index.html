@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Smart Office Sensors Display</title>
+    <link rel="stylesheet" href="css/dataPickerAPI-1.12.1.css"> <!-- Date picker -->
+    <link href="css/bootstrap.css" rel="stylesheet"> <!-- Bootstrap -->
+    <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script> <!-- jQuery api -->
+    <script src="js/dataPickerAPI-1.12.1.js" type="text/javascript"></script> <!-- Date picker -->
+    <script src="js/bootstrap.js" type="text/javascript"></script> <!-- Bootstrap jQuery -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="js/myJS.js" type="text/javascript"></script>
+  </head>
+<body>
+<div id="container-fluid">
+<div class="row">
+	
+	<div class="col-sm-4">
+ 		<div id="motes"></div>
+ 	</div>
+ 	<div class="col-sm-4">
+ 		<h4>Select the mote id you want to display</h4>
+ 		<form>
+ 		<div class="form-group">
+    
+    	<label>Mote id:</label>
+    	<input list='mote-datalist' id='mote' type="text">
+    	<datalist id="mote-datalist">
+        	<option value="101">Second Floor Kitchen Door</option>
+        	<option value="102">First Floor Meeting Rooms Access</option>
+        	<option value="103">Conference Room Door</option>
+        	<option value="104">Ground Floor Wing</option>
+        	<option value="105">Ground Floor E-GOV Wing</option>
+        	<option value="106">Sensor Lab Access</option>
+        	<option value="107">Second Floor Access</option>
+        	<option value="108">First Floor Wing/Museum Access</option>
+        	<option value="201">Second Floor Corridor</option>
+        	<option value="202">First Floor Wing/Living Lab</option>
+        	<option value="203">Museum</option>
+        	<option value="204">Outdoor Weather</option>
+        </datalist>
+        </div>
+
+    	<div class="form-group">
+    	<label>Start Date: (yyyy-mm-dd)</label>
+    	<input type="text" name="start_date" id="start_date" size="15" maxlength="40"/>
+    	</div>
+    	<div class="form-group">
+    	<label>End Date: (yyyy-mm-dd)</label>
+    	<input type="text" name="end_date" id="end_date" size="20" maxlength="60" />
+    	</div>
+    	</form>
+    	<button id="details" onclick="getData()">Get Mote Details & Graph Data</button>
+    	<button id="draw" class="drawGraph" onclick="submit()" style="display: none;">Draw Graph</button>
+    </div>
+    <div class="col-sm-4">
+    	<div>
+    	<table id="detail"><tbody>
+    	<tr><th>Details for mote ids</th></tr>
+    	<tr><th>Sensor</th><th>MinVal</th><th>MaxVal</th></tr>
+    	</tbody></table>
+    	</div>
+    </div>
+</div>
+
+<div class="row graphContainer" ></div>
+
+</div>
+</body>
+</html>
