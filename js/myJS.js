@@ -7,7 +7,6 @@ var endDate;
 var diffDays;
 var title;
 var graphCount =1;
-var divCount=1;
 
 
 //*************  http://api.jqueryui.com/datepicker ***********************8
@@ -20,10 +19,24 @@ $(function() {
   $("#start_date").datepicker();
   $("#end_date").datepicker();
 });
+//************************************************************************************************************************
+// Function used to remove graph when user hits X button.
+function removeDiv(value) {
+  $('div[id*='+value+']').remove();
+};
+//************************************************************************************************************************
+// Function used to reset buttons as user does not want to draw graph. Allows user to enter different inputs
+function reset() {
+  $('#details').toggle();
+  $('#draw').toggle();
+  $('#reset').toggle();
+  // clear the selection from the form fields after graph is setup
+  $("input[type=text], textarea").val("");
+};
 
-window.onload = function() {
 //*************************************************************************************************************************
 //HTTP request for mote location using getMotesLoc.php
+window.onload = function() {
   var motesReq = new XMLHttpRequest();
   
   motesReq.onload = function() {
@@ -42,7 +55,7 @@ window.onload = function() {
   motesReq.open("get", "php/getMotesLoc.php", true);
   motesReq.send();
 };
-
+//*************************************************************************************************************************
 //Store the user inputs and apply it to two AJAX request, one to get mote detals and second to get the raw data for the sensors in that mote
 function getData() { // Function called when user hits butoon "Get Mote Details & Data"
   mote = $('#mote').val();
@@ -59,25 +72,28 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   document.cookie = "startDate="+$('#start_date').val()+"; expires="+tomorrow; // Cookie is stored as string so we do not use date object.
   document.cookie = "endDate="+$('#end_date').val()+"; expires="+tomorrow;
 
-//*************************************************************************************************************************
+//********************************************************************
 //HTTP request for mote details using get_details.php
   var detailReq = new XMLHttpRequest();
   
   detailReq.onload = function() {
     motedetail =JSON.parse(this.responseText);
-    var content = "<tr><th>mote id "+mote+"</th></tr>";
+    var content = "<table><tbody><tr><th>mote id "+mote+"</th><th>MinVal</th><th>MaxVal</th></tr>";
     // Loop through the array to create the table rows in HTML
     for (var i=0;i<motedetail.length;i++) {
       var sensor = motedetail[i];
       content += "<tr><td>"+sensor.sensor+"</td><td>"+sensor.MinVal+"</td><td>"+sensor.MaxVal+"</td><tr>";
     }
-    $('#detail tr:last').after(content);
+    var start = startDate.toDateString();
+    var end = endDate.toDateString();
+    content += "<tr><th>startDate</th><th>End Date</th></tr><tr><td style='padding: 5px;'>"+start+"</td><td style='padding: 5px;'>"+end+"</td></tr></tbody></table>";
+    $('#detail').html(content);
   };
 
   detailReq.open("get", "php/get_detail.php", true);
   detailReq.send();
 
-//*************************************************************************************************************************
+//*********************************************************************
 //HTTP request for mote data
   var dataReq = new XMLHttpRequest();
   
@@ -87,12 +103,14 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
 
   dataReq.open("get", "php/get_data.php", true);
   dataReq.send();
+  //*********************************************************************
+  $('#details').toggle(); // hide the get details button
+  $('#draw').toggle(); // show the draw graph button
+  $("#reset").toggle(); //show the reset button
+
   } else {
     alert("Please check you have entered a mote_id and start/end dates as 'yyyy-mm-dd' with the option of time as 'yyyy-mm-dd hh:mm'. Note 00 is not a valid date of month!!");
   }
-
-  $('#details').toggle(); // hide the get details button
-  $('#draw').toggle(); // show the draw graph button
 } // end of get data function
 
 //*************************************************************************************************************************
@@ -204,7 +222,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
         options: {
             filterColumnLabel: 'colLabel',
             ui: {
-                label: 'Sensors',
+                label: '',
                 allowTyping: false,
                 allowMultiple: true,
                 allowNone: false,
@@ -223,8 +241,8 @@ function submit() {//called when the user hits the button "Draw Graoh"
             width: 500,
             height: 500,
             hAxis: {
-                title: 'Date(mmm/dd/yy)',
-                format: 'MMM/d/yy'
+                title: 'Date(Month/date/year)',
+                format: 'MMM/d/yy EEE' //show date format as ex Sep/4/16 Sun
             },
             seriesType: 'bars', // Sets the series(The columns) as bars
             vAxes: {
@@ -256,25 +274,18 @@ function submit() {//called when the user hits the button "Draw Graoh"
 
     // clear the selection from the form fields after graph is setup
     $("input[type=text], textarea").val("");
-    //clear the draw graph button
+    //Hide the draw graph button
     $("#draw").toggle();
-    //shoe the get details button
+    //Hide the reset button
+    $("#reset").toggle();
+    //show the get details button
     $("#details").toggle();
     //create new Divs to hold the graph filter and chart
-    var newDom = "<div class='col-sm-4'><div id='colFilter_div"+graphCount+"'></div><div id='chart_div"+graphCount+"'></div></div>";
-    if(divCount<4) { // if greater then 3 then we create a new row
-      $('.graphContainer:last').append(newDom);
-      graphCount++;
-      divCount++ // increment as new div added
-    } else {
-      var newRow = "<div class='row graphContainer'></div>"
-      divCount=1; // reset div count as new row is added
-      $('.graphContainer:last').after(newRow);
-      $('.graphContainer:last').append(newDom);
-      graphCount++;
-      divCount++;
-    }
-
+    var newDom = "<div id='"+graphCount+"' class='col-sm-4'><button style='float: right;' onclick='removeDiv("+graphCount+")'>X</button><div id='colFilter_div"+graphCount+"'></div><div id='chart_div"+graphCount+"'></div></div>";
+    //add the Dom to the index page by added it to the graph container div.
+    $('.graphContainer:last').append(newDom);
+    graphCount++; // increment the counter for the next graph
+ 
     google.visualization.events.addListener(columnFilter, 'statechange', setChartView);
     
     setChartView(); //draw chart

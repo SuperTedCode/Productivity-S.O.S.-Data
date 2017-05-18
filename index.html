@@ -51,15 +51,12 @@
     	</div>
     	</form>
     	<button id="details" onclick="getData()">Get Mote Details & Graph Data</button>
-    	<button id="draw" class="drawGraph" onclick="submit()" style="display: none;">Draw Graph</button>
+    	<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->
+    	<button id="reset" onclick="reset()" style="display: none;">Get different details</button>
     </div>
     <div class="col-sm-4">
-    	<div>
-    	<table id="detail"><tbody>
-    	<tr><th>Details for mote ids</th></tr>
-    	<tr><th>Sensor</th><th>MinVal</th><th>MaxVal</th></tr>
-    	</tbody></table>
-    	</div>
+    	<h4>Details of last retrieved mote id</h4>
+    	<div id="detail"></div>
     </div>
 </div>
 
