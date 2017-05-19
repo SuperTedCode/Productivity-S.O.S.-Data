@@ -1,5 +1,6 @@
 table {
   border-collapse: collapse;
+  margin: 0 auto;
 }
 
 table, th, td {
@@ -8,6 +9,7 @@ table, th, td {
 
 th {
 	color: #2e00ff;
+	text-align: center;
 }
 /*
 #chart_div {
