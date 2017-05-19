@@ -49,6 +49,12 @@
     	<label>End Date: (yyyy-mm-dd)</label>
     	<input type="text" name="end_date" id="end_date" size="20" maxlength="60" />
     	</div>
+    	<div class="form-group">
+    	<label>Select graph type</label><br>
+    	<input type="radio" name="graphType" value="ColumnChart"/>Bar Chart
+    	<input type="radio" name="graphType" value="AreaChart"/>AreaChart
+    	<input type="radio" name="graphType" value="LineChart"/>LineChart<br>
+    	</div>
     	</form>
     	<button id="details" onclick="getData()">Get Mote Details & Graph Data</button>
     	<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->

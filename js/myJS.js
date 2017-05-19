@@ -7,6 +7,7 @@ var endDate;
 var diffDays;
 var title;
 var graphCount =1;
+var chartType;
 
 
 //*************  http://api.jqueryui.com/datepicker ***********************8
@@ -61,6 +62,7 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   mote = $('#mote').val();
   startDate = new Date($('#start_date').val()); //converted to date object to make sure user entered valid date
   endDate = new Date($('#end_date').val());
+  chartType = $('input:checked').val(); // Get chart type from user
 
   if(mote&& !isNaN(startDate.getDate()) && !isNaN(endDate.getDate())) { // Date object checked for date value which ensures valid date object
   //set up variables as cookies for get_detail and get_data php scripts with 1 day expirey
@@ -233,7 +235,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
     });
 
     var chart = new google.visualization.ChartWrapper({
-        chartType: 'ComboChart',
+        chartType: chartType,
         containerId: 'chart_div'+graphCount,
         dataTable: data,
         options: {
@@ -244,7 +246,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
                 title: 'Date(Month/date/year)',
                 format: 'MMM/d/yy EEE' //show date format as ex Sep/4/16 Sun
             },
-            seriesType: 'bars', // Sets the series(The columns) as bars
+           // seriesType: 'bars', // Sets the series(The columns) as bars
             vAxes: {
                 0: {title:'Sensor counter & Avg'}
             },
@@ -255,6 +257,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
     });
 
     function setChartView () {
+        
         var state = columnFilter.getState();
         var row;
         var view = {
@@ -281,7 +284,8 @@ function submit() {//called when the user hits the button "Draw Graoh"
     //show the get details button
     $("#details").toggle();
     //create new Divs to hold the graph filter and chart
-    var newDom = "<div id='"+graphCount+"' class='col-sm-4'><button style='float: right;' onclick='removeDiv("+graphCount+")'>X</button><div id='colFilter_div"+graphCount+"'></div><div id='chart_div"+graphCount+"'></div></div>";
+    var newDom = "<div id='"+graphCount+"' class='col-sm-4'><button style='float: right;' onclick='removeDiv("+graphCount+")'>X</button><div id='colFilter_div"+graphCount+"'></div>";
+    newDom += "<div id='chart_div"+graphCount+"'></div></div>";
     //add the Dom to the index page by added it to the graph container div.
     $('.graphContainer:last').append(newDom);
     graphCount++; // increment the counter for the next graph
@@ -295,5 +299,4 @@ function submit() {//called when the user hits the button "Draw Graoh"
 }// end of if object statment
 else { alert("invalid data returned");}
 }; // End of Submit function
-
 
