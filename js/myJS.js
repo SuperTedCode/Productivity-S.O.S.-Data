@@ -5,7 +5,6 @@ var mote;
 var startDate;
 var endDate;
 var diffDays;
-var title;
 var graphCount =1;
 var chartType;
 
@@ -43,7 +42,7 @@ window.onload = function() {
   motesReq.onload = function() {
     motes =JSON.parse(this.responseText);
 
-    var content = "<h4>Details for mote Locations</h4><table><tbody><tr><th>Mode ID</th><th>location</th></tr>";
+    var content = "<h4>Mote Locations</h4><table><tbody><tr><th>Mode ID</th><th>location</th></tr>";
     // Loop through the array to create the table rows in HTML
     for (var i=0;i<motes.length;i++) {
       var mote = motes[i];
@@ -122,7 +121,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
 
   //Check if data obj was retreived
   if(typeof(moteArray) ==='object') {
-
+  var title;
 //************Get the desc of the mote id location and assign it to the Graph Title
   var dataList = $('option');
 
@@ -132,8 +131,9 @@ function submit() {//called when the user hits the button "Draw Graoh"
     }
   };
 
-  title += " (mote id "+mote+")";
-
+  if(title) {
+    title += " (mote id "+mote+")";
+  } else { title = "(mote id "+mote+")";};
 //*********** Create an Object With property values = sensor names and its values = Arrays for Graph with lenght = #days ********************************
   var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
   var diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime())/(oneDay))); //Get the # of days from start and end dates
@@ -285,13 +285,14 @@ function submit() {//called when the user hits the button "Draw Graoh"
     //show the get details button
     $("#details").toggle();
     //create new Divs to hold the graph filter and chart
-    var newDom = "<div id='"+graphCount+"' class='col-sm-12 thumbnail'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span><div id='colFilter_div"+graphCount+"'></div>";
+    var newDom = "<div id='"+graphCount+"' class='col-sm-11 thumbnail'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span><div id='colFilter_div"+graphCount+"'></div>";
     newDom += "<div id='chart_div"+graphCount+"'></div></div>";
     //add the Dom to the index page by added it to the graph container div.
     $('.graphContainer:last').append(newDom);
     graphCount++; // increment the counter for the next graph
  
     google.visualization.events.addListener(columnFilter, 'statechange', setChartView);
+  
     
     setChartView(); //draw chart
     columnFilter.draw(); // draw the column filter

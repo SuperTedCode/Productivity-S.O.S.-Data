@@ -1,6 +1,28 @@
+body {
+	background-color: #e6f1ff;
+}
+
+#homeBanner {
+	background-color: #66a3ff;
+	width: 100%;
+	height: 45px;
+	padding: 15px;
+	font-weight: bold;
+	color: white;
+}
+
+#logo {
+	background-image: url(../css/images/logo.png);
+	background-position: center;
+	background-size: contain;
+	background-repeat:no-repeat;
+	max-width: 100%;
+	height: 120px;
+	background-color: #e6e6e6;
+}
 table {
   border-collapse: collapse;
-  margin: 0 auto;
+  margin: 5px auto;
 }
 
 table, th, td {
@@ -11,9 +33,13 @@ th {
 	color: #2e00ff;
 	text-align: center;
 }
-/*
-#chart_div {
-	width:700;
-	height:900;
+
+.thumbnail {
+	margin: 5px;
+	/*background-color: #cce4ff;*/
 }
-*/
+
+.col-sm-11.thumbnail {
+	margin: 20px 30px 20px 30px;
+	
+}
