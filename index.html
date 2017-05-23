@@ -15,76 +15,55 @@
 <body>
 <div class="container-fluid text-center">
 <div id="homeBanner">Insights smart office sesnor display</div>
-<div class="row">
-	
-	<div class="col-sm-3 thumbnail">
- 		<div id="motes"></div>
- 	</div>
- 	<div class="col-sm-4 thumbnail">
- 		<h4>Select the mote id you want to display</h4>
- 		<form>
- 		<div class="form-group">
-    
-    	<label>Mote id:</label>
-    	<input list='mote-datalist' id='mote' type="text">
-    	<datalist id="mote-datalist">
-        	<option value="101">Second Floor Kitchen Door</option>
-        	<option value="102">First Floor Meeting Rooms Access</option>
-        	<option value="103">Conference Room Door</option>
-        	<option value="104">Ground Floor Wing</option>
-        	<option value="105">Ground Floor E-GOV Wing</option>
-        	<option value="106">Sensor Lab Access</option>
-        	<option value="107">Second Floor Access</option>
-        	<option value="108">First Floor Wing/Museum Access</option>
-        	<option value="201">Second Floor Corridor</option>
-        	<option value="202">First Floor Wing/Living Lab</option>
-        	<option value="203">Museum</option>
-        	<option value="204">Outdoor Weather</option>
-        </datalist>
-        </div>
 
-    	<div class="form-group">
-    	<label>Start Date: (yyyy-mm-dd)</label>
-    	<input type="text" name="start_date" id="start_date" size="15" maxlength="40"/>
-    	</div>
-    	<div class="form-group">
-    	<label>End Date: (yyyy-mm-dd)</label>
-    	<input type="text" name="end_date" id="end_date" size="20" maxlength="60" />
-    	</div>
-    	<div class="form-group">
-    	<label>Select graph type</label><br>
-    	<input type="radio" name="graphType" value="ColumnChart" checked="checked"/>Bar Chart
-    	<input type="radio" name="graphType" value="AreaChart"/>AreaChart
-    	<input type="radio" name="graphType" value="LineChart"/>LineChart<br>
-    	</div>
-    	</form>
-    	<button id="details" onclick="getData()">Get Mote Details & Graph Data</button>
-    	<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->
-    	<button id="reset" onclick="reset()" style="display: none;">Get different details</button>
-    </div>
-    <div class="col-sm-4 thumbnail">
-    	<h4>Details of last retrieved mote id</h4>
-    	<div id="detail"></div>
-    </div>
-    <div class="col-sm-4 thumbnail" id="logo"></div>
+<div id="build" class="col-sm-2">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<i class="glyphicon glyphicon-stats"></i> Build your Graph
+		</div>
+		<div class="panel-body">
+			<form>
+			<div class="form-group">
+				<label>Mote id:</label>
+				<input list='mote-datalist' id='mote' type="text">
+	
+				<label>Start Date: (yyyy-mm-dd)</label>
+				<input type="text" name="start_date" id="start_date" size="15"/>
+		
+				<label>End Date: (yyyy-mm-dd)</label>
+				<input type="text" name="end_date" id="end_date" size="20"/>
+		
+				<label>Select graph type</label><br>
+				<input type="radio" name="graphType" value="ColumnChart" checked="checked"/>Bar Chart
+				<input type="radio" name="graphType" value="AreaChart"/>Area Chart
+				<input type="radio" name="graphType" value="LineChart"/>Line Chart<br>
+			</div>
+			</form>
+			<button id="details" onclick="getData()">Mote Detail & Graph Data</button>
+			<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button><hr> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->
+			<button id="reset" onclick="reset()" style="display: none;">Reset</button>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<i class="glyphicon glyphicon-cog"></i> Details of last retrieved mote id
+		</div>
+		<div id="detail"></div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<i class="glyphicon glyphicon-globe"></i> Mote Locations
+		</div>
+		<div class="panel-body">
+			<div id="motes"></div>
+		</div>
+	</div>
 </div>
-</div>
-<div class="container-fluid">
-<div class="row graphContainer" ></div>
+<div class="col-xs-4 col-sm-6 col-md-9 row graphContainer">
 </div>
 </div>
 </body>
 </html>
-
-
-
-
-
-
-
-
-   
-
 
 
 
