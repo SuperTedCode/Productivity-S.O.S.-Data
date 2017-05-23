@@ -2,6 +2,7 @@
 var moteArray = [];
 var motedetail;
 var mote;
+var motes;
 var startDate;
 var endDate;
 var diffDays;
@@ -45,8 +46,7 @@ window.onload = function() {
     var content = "<table><tbody><tr><th>Mode ID</th><th>location</th></tr>";
     // Loop through the array to create the table rows in HTML
     for (var i=0;i<motes.length;i++) {
-      var mote = motes[i];
-      content += "<tr><td>"+mote.mote+"</td><td>"+mote.location+"</td><tr>";
+      content += "<tr><td>"+motes[i].mote+"</td><td>"+motes[i].location+"</td><tr>";
     }
     content += "</tbody></table>"; //close the table tags
     $("#motes").append(content); //append HTMl to div with id motes
@@ -123,11 +123,9 @@ function submit() {//called when the user hits the button "Draw Graoh"
   if(typeof(moteArray) ==='object') {
   var title;
 //************Get the desc of the mote id location and assign it to the Graph Title
-  var dataList = $('option');
-
-  for(var i=0;i<dataList.length;i++) {
-    if(dataList[i].value === mote) {
-      title = dataList[i].innerHTML;
+  for(var i=0;i<motes.length;i++) {
+    if(motes[i].mote === mote) {
+      title = motes[i].location;
     }
   };
 
@@ -242,7 +240,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
         options: {
             title: title, // Title variable set at start of submit func
             width: '100%',
-            height: 250,
+            height: 200,
             pointSize: 3,
             hAxis: {
                 title: 'Date(Month/date/year)',
