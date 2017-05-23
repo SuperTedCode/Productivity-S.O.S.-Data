@@ -42,7 +42,7 @@ window.onload = function() {
   motesReq.onload = function() {
     motes =JSON.parse(this.responseText);
 
-    var content = "<h4>Mote Locations</h4><table><tbody><tr><th>Mode ID</th><th>location</th></tr>";
+    var content = "<table><tbody><tr><th>Mode ID</th><th>location</th></tr>";
     // Loop through the array to create the table rows in HTML
     for (var i=0;i<motes.length;i++) {
       var mote = motes[i];
@@ -225,6 +225,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
             filterColumnLabel: 'colLabel',
             ui: {
                 label: '',
+                caption: "Select Sensors",
                 allowTyping: false,
                 allowMultiple: true,
                 allowNone: false,
@@ -241,7 +242,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
         options: {
             title: title, // Title variable set at start of submit func
             width: '100%',
-            height: 300,
+            height: 250,
             pointSize: 3,
             hAxis: {
                 title: 'Date(Month/date/year)',
@@ -285,7 +286,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
     //show the get details button
     $("#details").toggle();
     //create new Divs to hold the graph filter and chart
-    var newDom = "<div id='"+graphCount+"' class='col-sm-11 thumbnail'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span><div id='colFilter_div"+graphCount+"'></div>";
+    var newDom = "<div id='"+graphCount+"' class='graph'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span><div id='colFilter_div"+graphCount+"'></div>";
     newDom += "<div id='chart_div"+graphCount+"'></div></div>";
     //add the Dom to the index page by added it to the graph container div.
     $('.graphContainer:last').append(newDom);
