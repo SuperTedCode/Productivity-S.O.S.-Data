@@ -6,17 +6,20 @@
     <link rel="stylesheet" href="css/dataPickerAPI-1.12.1.css"> <!-- Date picker -->
     <link href="css/bootstrap.css" rel="stylesheet"> <!-- Bootstrap -->
     <link href="css/style.css" rel="stylesheet"> <!-- my Styles -->
+    <link href="css/paceBar.css" rel="stylesheet"> <!-- Pace Loading bar -->
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script> <!-- jQuery api -->
     <script src="js/dataPickerAPI-1.12.1.js" type="text/javascript"></script> <!-- Date picker -->
     <script src="js/bootstrap.js" type="text/javascript"></script> <!-- Bootstrap jQuery -->
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="js/pace.js" type="text/javascript"></script>
     <script src="js/myJS.js" type="text/javascript"></script>
   </head>
 <body>
 <div class="container-fluid text-center">
-<div id="homeBanner">Insight smart office sesnor display</div>
+<div id="homeBanner"><span style="float:left;" onclick="openNav()">&#9776; Open</span>Smart Office Sensor Display (SOSD)</div>
 
-<div id="build" class="col-sm-2">
+<div id="build">
+<a class="closebtn" onclick="closeNav()">&times;</a>
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<i class="glyphicon glyphicon-stats"></i> Build your Graph
@@ -24,14 +27,14 @@
 		<div class="panel-body">
 			<form>
 			<div class="form-group">
-				<label>Mote id:</label>
-				<input list='mote-datalist' id='mote' type="text">
+				<label>Mote id:</label><br>
+				<input type="text" id='mote' size="15">
 	
 				<label>Start Date: (yyyy-mm-dd)</label>
 				<input type="text" name="start_date" id="start_date" size="15"/>
 		
 				<label>End Date: (yyyy-mm-dd)</label>
-				<input type="text" name="end_date" id="end_date" size="20"/>
+				<input type="text" name="end_date" id="end_date" size="15"/>
 		
 				<label>Select graph type</label><br>
 				<input type="radio" name="graphType" value="ColumnChart" checked="checked"/>Bar Chart
@@ -40,7 +43,7 @@
 			</div>
 			</form>
 			<button id="details" onclick="getData()">Mote Detail & Graph Data</button>
-			<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button><hr> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->
+			<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->
 			<button id="reset" onclick="reset()" style="display: none;">Reset</button>
 		</div>
 	</div>
@@ -59,9 +62,9 @@
 		</div>
 	</div>
 </div>
-<div class="col-xs-4 col-sm-6 col-md-9 row graphContainer">
+<div class="col-sm-6 col-md-9 row graphContainer" id="main"></div>
 </div>
-</div>
+
 </body>
 </html>
 

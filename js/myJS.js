@@ -5,11 +5,24 @@ var mote;
 var motes;
 var startDate;
 var endDate;
+var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
 var diffDays;
 var graphCount =1;
 var chartType;
+var graphArrays = {};
+var title;
 
+/* Set the width of the side navigation to 250px */
+function openNav() {
+    document.getElementById("build").style.width = "250px";
+    document.getElementById("main").style.marginLeft = "250px";
+};
 
+/* Set the width of the side navigation to 0 */
+function closeNav() {
+    document.getElementById("build").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+};
 //*************  http://api.jqueryui.com/datepicker ***********************8
 // API for the date input fields used for the SQL query, Format set for mySQL.
 $.datepicker.setDefaults({
@@ -58,12 +71,16 @@ window.onload = function() {
 //*************************************************************************************************************************
 //Store the user inputs and apply it to two AJAX request, one to get mote detals and second to get the raw data for the sensors in that mote
 function getData() { // Function called when user hits butoon "Get Mote Details & Data"
+  Pace.restart();
   mote = $('#mote').val();
   startDate = new Date($('#start_date').val()); //converted to date object to make sure user entered valid date
   endDate = new Date($('#end_date').val());
   chartType = $('input:checked').val(); // Get chart type from user
-
-  if(mote&& !isNaN(startDate.getDate()) && !isNaN(endDate.getDate())) { // Date object checked for date value which ensures valid date object
+  diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime())/(oneDay))); //Get the # of days from start and end dates
+  if(diffDays>61) {
+    alert("Date range cannot be greater then 60 days");
+  }
+  else if(mote && !isNaN(startDate.getDate()) && !isNaN(endDate.getDate())) { // start and end dates checked for date value which ensures valid date object
   //set up variables as cookies for get_detail and get_data php scripts with 1 day expirey
   var toDay = new Date();
   toDay.setDate(toDay.getDate() + 1); // Set to one day
@@ -100,28 +117,9 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   
   dataReq.onload = function() {
     moteArray =JSON.parse(this.responseText);
-  };
-
-  dataReq.open("get", "php/get_data.php", true);
-  dataReq.send();
-  //*********************************************************************
-  $('#details').toggle(); // hide the get details button
-  $('#draw').toggle(); // show the draw graph button
-  $("#reset").toggle(); //show the reset button
-
-  } else {
-    alert("Please check you have entered a mote_id and start/end dates as 'yyyy-mm-dd' with the option of time as 'yyyy-mm-dd hh:mm'. Note 00 is not a valid date of month!!");
-  }
-} // end of get data function
-
-//*************************************************************************************************************************
-//*************************************************************************************************************************
-//Set up arrays with sensor data to populate the google chart
-function submit() {//called when the user hits the button "Draw Graoh"
-
-  //Check if data obj was retreived
+    //Check if data obj was retreived
   if(typeof(moteArray) ==='object') {
-  var title;
+
 //************Get the desc of the mote id location and assign it to the Graph Title
   for(var i=0;i<motes.length;i++) {
     if(motes[i].mote === mote) {
@@ -132,11 +130,11 @@ function submit() {//called when the user hits the button "Draw Graoh"
   if(title) {
     title += " (mote id "+mote+")";
   } else { title = "(mote id "+mote+")";};
-//*********** Create an Object With property values = sensor names and its values = Arrays for Graph with lenght = #days ********************************
-  var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
-  var diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime())/(oneDay))); //Get the # of days from start and end dates
 
-  var graphArrays ={}; // Create object with properties named after each sensor with a value of an array of length equal to days in user input
+//******************************************************************************************************************************
+// Create object with properties named after each sensor with a value of an array of length equal to days in user input
+  graphArrays = {}; // reset needed for each new graph.
+
   for(var i=0;i<motedetail.length;i++) {
     if(motedetail[i].MaxVal>1) { // If value is greater then 1 then we work out an average by having sum and avg array also
       graphArrays[motedetail[i].sensor] = new Array(diffDays).fill(0);
@@ -174,6 +172,43 @@ function submit() {//called when the user hits the button "Draw Graoh"
       }
     }
   };
+
+  console.log(graphArrays.AcousticAvg);
+  console.log(Math.max.apply(null,graphArrays.AcousticAvg));
+
+}// end of if object statment
+else { 
+  alert(moteArray);
+  $("input[type=text], textarea").val("");
+    //Hide the draw graph button
+    $("#draw").toggle();
+    //Hide the reset button
+    $("#reset").toggle();
+    //show the get details button
+    $("#details").toggle();
+}
+
+
+  }; // End of dataReq.onload function
+
+  dataReq.open("get", "php/get_data.php", true);
+  dataReq.send();
+  //*********************************************************************
+  $('#details').toggle(); // hide the get details button
+  $('#draw').toggle(); // show the draw graph button
+  $("#reset").toggle(); //show the reset button  
+  } // end of if statment to check date and mote from user inputs.
+  else {
+    alert("Please check you have entered a mote_id and start/end dates as 'yyyy-mm-dd' with the option of time as 'yyyy-mm-dd hh:mm'. Date Range must beless then two months!!");
+  }
+}; // end of get data function
+
+//*************************************************************************************************************************
+//*************************************************************************************************************************
+//Set up arrays with sensor data to populate the google chart
+function submit() {//called when the user hits the button "Draw Graoh"
+Pace.restart();
+
 //*************************************************************************************************************************
 // Load the Visualization API and the corechart package. Details on https://google-developers.appspot.com/chart/interactive/docs/basic_load_libs
   google.charts.load('current', {'packages':['corechart','controls']});
@@ -190,6 +225,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
     };
     //reset startDate object from input
     startDate = new Date($('#start_date').val());
+
     for(i=0;i<diffDays;i++) {//loop each sensor array item
 
       var row = [new Date(startDate)]; // First col been the date
@@ -274,7 +310,6 @@ function submit() {//called when the user hits the button "Draw Graoh"
         chart.setView(view);
         chart.draw();
     }
-
     // clear the selection from the form fields after graph is setup
     $("input[type=text], textarea").val("");
     //Hide the draw graph button
@@ -295,9 +330,7 @@ function submit() {//called when the user hits the button "Draw Graoh"
     
     setChartView(); //draw chart
     columnFilter.draw(); // draw the column filter
-
   } // end of DrawChart func
-}// end of if object statment
-else { alert(moteArray);}
+
 }; // End of Submit function
 
