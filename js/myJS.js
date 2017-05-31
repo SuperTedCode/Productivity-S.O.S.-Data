@@ -11,6 +11,7 @@ var graphCount =1;
 var chartType;
 var graphArrays = {};
 var title;
+var detailContent;
 
 /* Set the width of the side navigation to 250px */
 function openNav() {
@@ -96,16 +97,16 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   
   detailReq.onload = function() {
     motedetail =JSON.parse(this.responseText);
-    var content = "<table><tbody><tr><th>mote id "+mote+"</th><th>MinVal</th><th>MaxVal</th></tr>";
+    detailContent = "<table><tbody><tr><th>mote id "+mote+"</th><th>MinVal</th><th>MaxVal</th></tr>";
     // Loop through the array to create the table rows in HTML
     for (var i=0;i<motedetail.length;i++) {
       var sensor = motedetail[i];
-      content += "<tr><td>"+sensor.sensor+"</td><td>"+sensor.MinVal+"</td><td>"+sensor.MaxVal+"</td><tr>";
+      detailContent += "<tr><td>"+sensor.sensor+"</td><td>"+sensor.MinVal+"</td><td>"+sensor.MaxVal+"</td></tr>";
     }
     var start = startDate.toDateString();
     var end = endDate.toDateString();
-    content += "<tr><th>startDate</th><th>End Date</th></tr><tr><td style='padding: 5px;'>"+start+"</td><td style='padding: 5px;'>"+end+"</td></tr></tbody></table>";
-    $('#detail').html(content);
+    detailContent += "<tr><th colspan='3'>startDate</th></tr><tr><td colspan='3 style='padding: 5px;'>"+start+"</td></tr><tr><th colspan='3'>End Date</th></tr><tr><td colspan='3' style='padding: 5px;'>"+end+"</td></tr></tbody></table>";
+  
   };
 
   detailReq.open("get", "php/get_detail.php", true);
@@ -117,7 +118,7 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   
   dataReq.onload = function() {
     moteArray =JSON.parse(this.responseText);
-    //Check if data obj was retreived
+  //Check if data obj was retreived
   if(typeof(moteArray) ==='object') {
 
 //************Get the desc of the mote id location and assign it to the Graph Title
@@ -173,8 +174,11 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
     }
   };
 
-  console.log(graphArrays.AcousticAvg);
-  console.log(Math.max.apply(null,graphArrays.AcousticAvg));
+  for(var i=0;i<motedetail.length;i++) {
+    
+  }
+  //console.log(graphArrays.AcousticAvg);
+  //console.log(Math.max.apply(null,graphArrays.AcousticAvg));
 
 }// end of if object statment
 else { 
@@ -319,10 +323,12 @@ Pace.restart();
     //show the get details button
     $("#details").toggle();
     //create new Divs to hold the graph filter and chart
-    var newDom = "<div id='"+graphCount+"' class='graph'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span><div id='colFilter_div"+graphCount+"'></div>";
-    newDom += "<div id='chart_div"+graphCount+"'></div></div>";
+    var newDom = "<div id='"+graphCount+"' class='chart'><div class='col-sm-6 col-md-9'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span>";
+    newDom += "<div id='colFilter_div"+graphCount+"'></div><div id='chart_div"+graphCount+"'></div></div>";
+    newDom += "<div id='contentDetail"+graphCount+"' class='col-md-2'></div></div>";
     //add the Dom to the index page by added it to the graph container div.
     $('.graphContainer:last').append(newDom);
+    $('#contentDetail'+graphCount).html(detailContent);
     graphCount++; // increment the counter for the next graph
  
     google.visualization.events.addListener(columnFilter, 'statechange', setChartView);

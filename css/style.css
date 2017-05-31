@@ -48,7 +48,12 @@ input {
 	max-width: 90%;
 }
 
-.graph {
+.col-sm-6.col-md-9 {
 	margin: 20px 30px 20px 30px;
+
+}
+
+.col-md-2 {
+    margin: 20px 0px 20px 0px;
 
 }
