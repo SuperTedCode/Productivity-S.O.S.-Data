@@ -5,10 +5,12 @@
 require ('insightDBaccess.php'); // Connect to the db.
 
 $mid=$_COOKIE["mote"];
+$sd=$_COOKIE["startDate"];
+$ed=$_COOKIE["endDate"];
 $detailArray =[];
 
 
-$q2 = "SELECT DISTINCT modality, Min(value) as minVal, max(value) as maxVal FROM sensor_data where mote_id = '$mid' GROUP by modality";
+$q2 = "SELECT DISTINCT modality, Min(value) as minVal, max(value) as maxVal FROM sensor_data where mote_id = '$mid' and date_time BETWEEN '$sd' and '$ed' GROUP by modality";
 $r2 = @mysqli_query ($dbc, $q2);
 
 
