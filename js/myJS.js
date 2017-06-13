@@ -37,7 +37,7 @@ $(function() {
 //************************************************************************************************************************
 // Function used to remove graph when user hits X button.
 function removeDiv(value) {
-  $('div[id*='+value+']').remove();
+  $('div[id='+value+']').remove();
 };
 //************************************************************************************************************************
 // Function used to reset buttons as user does not want to draw graph. Allows user to enter different inputs
@@ -173,12 +173,6 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
       }
     }
   };
-
-  for(var i=0;i<motedetail.length;i++) {
-    
-  }
-  //console.log(graphArrays.AcousticAvg);
-  //console.log(Math.max.apply(null,graphArrays.AcousticAvg));
 
 }// end of if object statment
 else { 
@@ -323,9 +317,9 @@ Pace.restart();
     //show the get details button
     $("#details").toggle();
     //create new Divs to hold the graph filter and chart
-    var newDom = "<div id='"+graphCount+"' class='chart'><div class='col-sm-6 col-md-9'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span>";
-    newDom += "<div id='colFilter_div"+graphCount+"'></div><div id='chart_div"+graphCount+"'></div></div>";
-    newDom += "<div id='contentDetail"+graphCount+"' class='col-md-2'></div></div>";
+    var newDom = "<div id='"+graphCount+"' class='row chart'><div id='contentDetail"+graphCount+"' class='col-md-3'></div>";
+    newDom += "<div class='col-sm-7 col-md-8'><span class='glyphicon glyphicon-remove' style='float: right;' onclick='removeDiv("+graphCount+")'></span>";
+    newDom += "<div id='colFilter_div"+graphCount+"'></div><div id='chart_div"+graphCount+"'></div></div></div>";
     //add the Dom to the index page by added it to the graph container div.
     $('.graphContainer:last').append(newDom);
     $('#contentDetail'+graphCount).html(detailContent);

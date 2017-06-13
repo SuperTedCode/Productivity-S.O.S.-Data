@@ -48,12 +48,17 @@ input {
 	max-width: 90%;
 }
 
-.col-sm-6.col-md-9 {
+.row.chart {
+     margin: 20px 0px 20px 0px;
+}
+/*
+.col-sm-5.col-md-8 {
 	margin: 20px 30px 20px 30px;
 
 }
 
-.col-md-2 {
+.col-md-3 {
     margin: 20px 0px 20px 0px;
 
 }
+*/
