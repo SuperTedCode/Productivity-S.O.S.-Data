@@ -56,12 +56,21 @@ window.onload = function() {
   
   motesReq.onload = function() {
     motes =JSON.parse(this.responseText);
-
-    var content = "<table><tbody><tr><th>Mode ID</th><th>location</th></tr>";
     // Loop through the array to create the table rows in HTML
+    var content = "<table><tbody><tr><th colspan='2'>Sensor types</th></tr><tr><th>Name</th><th>Unit</th></tr>";
     for (var i=0;i<motes.length;i++) {
-      content += "<tr><td>"+motes[i].mote+"</td><td>"+motes[i].location+"</td><tr>";
-    }
+      if(motes[i].name){ //filter out the objects in the array for mote id and location
+        content += "<tr><td>"+motes[i].name+"</td><td>"+motes[i].unit+"</td><tr>";
+      }
+    };
+
+    content += "<tr><th colspan='2'>Mote List</th></tr><tr><th>location</th><th>Mote ID</th></tr>"; // Add seperate headings for mote locations
+    
+    for (var i=0;i<motes.length;i++) {
+      if(motes[i].mote){ //Filter out the objexts in the array for sensor name and unit
+        content += "<tr><td>"+motes[i].mote+"</td><td>"+motes[i].location+"</td><tr>";
+      }
+    };
     content += "</tbody></table>"; //close the table tags
     $("#motes").append(content); //append HTMl to div with id motes
   };
@@ -236,7 +245,7 @@ Pace.restart();
       data.addRow(row);
       startDate.setTime(startDate.getTime()+oneDay); // increment the startDate object by mil sec so month change is made
     };  
-    //************************** column selecter *****************************************************************************************
+    //************************** column selector *****************************************************************************************
     var columnsTable = new google.visualization.DataTable();
     columnsTable.addColumn('number', 'colIndex');
     columnsTable.addColumn('string', 'colLabel');
@@ -280,7 +289,6 @@ Pace.restart();
                 title: 'Date(Month/date/year)',
                 format: 'MMM/d/yy EEE' //show date format as ex Sep/4/16 Sun
             },
-           // seriesType: 'bars', // Sets the series(The columns) as bars
             vAxes: {
                 0: {title:'Sensor counter & Avg'}
             },

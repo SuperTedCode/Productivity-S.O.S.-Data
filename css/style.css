@@ -42,6 +42,9 @@ table, th, td {
 
 th {
 	text-align: center;
+    color: white;
+    background-color: #66a3ff;
+    border-color: black;
 }
 
 input {
