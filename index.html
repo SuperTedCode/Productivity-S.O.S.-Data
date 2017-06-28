@@ -16,7 +16,9 @@
   </head>
 <body>
 <div class="container-fluid text-center">
-<div id="homeBanner"><span style="float:left;" onclick="openNav()">&#9776; Open</span>Productivity S.O.S. Data</div>
+<div id="imgBanner"> <img src="css/images/logo.png"></div>
+<div id="info"><div class="infoContent"><p>Please be aware an internet connection is needed when biulding charts. On start-up there are three charts displayed to show you what is available. A Bar chart, Area chart and a Line chart. The first mote on the list is selected for these default charts with five days of data. When a sensor is removed or added to a chart the view is updated and the charts width is set relative to the window size when it is loaded/updated.</p><button onclick="closeInfo()">Close</button></div></div>
+<div id="homeBanner"><span class="open" style="float:left;" onclick="openNav()">&#9776; Open</span>Productivity S.O.S. Data</div>
 
 <div id="build">
 <a class="closebtn" onclick="closeNav()">&times;</a>
@@ -49,8 +51,9 @@
 	</div>
 
 	<div class="panel panel-default">
-		<div class="panel-heading">
-			<i class="glyphicon glyphicon-info-sign"></i> Sensor units & Mote List
+		<div class="panel-heading popup" onclick="starterMesg()">
+		<span class="popuptext" id="myPopup">Click on a Mote ID from the list below to build your chart. Enter the Start and End dates into the fields above and choose the chart type to display!</span>
+			<i class="glyphicon glyphicon-info-sign"></i> <b>Click here for info</b><br> Sensor units & Mote List
 		</div>
 		<div class="panel-body">
 			<div id="motes"></div>

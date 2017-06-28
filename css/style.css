@@ -2,6 +2,7 @@ body {
 	background-color: #e6f1ff;
 }
 
+
 #homeBanner {
 	background-color: #66a3ff;
 	height: 45px;
@@ -14,7 +15,7 @@ body {
 
 #build {
     height: 100%; /* 100% Full-height */
-    width: 250px; /* 0 width - change this with JavaScript */
+    width: 0px; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
     background-color: white;
@@ -32,6 +33,7 @@ body {
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+    cursor: pointer;
 }
 
 
@@ -47,6 +49,12 @@ th {
     border-color: black;
 }
 
+.mote:hover {
+    background-color: #66a3ff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
 input {
 	max-width: 90%;
 }
@@ -54,14 +62,104 @@ input {
 .row.chart {
      margin: 20px 0px 20px 0px;
 }
-/*
-.col-sm-5.col-md-8 {
-	margin: 20px 30px 20px 30px;
 
+/* Popup container */
+.popup {
+    position: relative;
+    cursor: pointer;
 }
 
-.col-md-3 {
-    margin: 20px 0px 20px 0px;
-
+/* The actual popup (appears on top) */
+.popup .popuptext {
+    visibility: visible;
+    width: 160px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -80px;
 }
-*/
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+    visibility: hidden;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+}
+
+.open {
+  animation: shake 1.82s cubic-bezier(.36,.07,.19,.97) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  animation-iteration-count:infinite;
+  cursor: pointer;
+}
+
+@keyframes shake {
+    10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+#info {
+    position: fixed;
+    font-family: Arial, Helvetica, sans-serif;
+    left: 10%;
+    bottom: 10%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999;
+    height: 80%;
+    width: 80%;
+ 
+}
+
+.infoContent {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    width: 80%;
+    padding: 20px;
+}
