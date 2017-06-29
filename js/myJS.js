@@ -448,7 +448,9 @@ function drawDefaultChart1() {
 //When the charts page is loaded we want to display the list of motes and three charts to the user.
 //HTTP request for mote location using getMotesLoc.php
 window.onload = function() {
-  //clear cookies on start up
+  //clear cookies so google charts will reload callbacks for default charts when user hits refresh
+  sessionStorage.clear();
+  localStorage.clear();
 
   var motesReq = new XMLHttpRequest();
   
