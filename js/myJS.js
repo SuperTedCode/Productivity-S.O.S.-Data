@@ -549,7 +549,7 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   chartType = $('input:checked').val(); // Get chart type from user
   diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime())/(oneDay))); //Get the # of days from start and end dates
   if(diffDays>61 | diffDays<2) {
-    alert("Min/Max date rage allowed is 2 and 60 days. Current range is "+diffDays);
+    alert("Date rage allowed is minimun 2 and maximun 60 days. Current range is "+diffDays+" Days!!");
   }
   else if(mote && !isNaN(startDate.getDate()) && !isNaN(endDate.getDate())) { // start and end dates checked for date value which ensures valid date object
   //set up variables as cookies for get_detail and get_data php scripts with 1 day expirey
