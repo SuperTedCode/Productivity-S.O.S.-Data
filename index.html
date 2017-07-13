@@ -10,69 +10,44 @@
     <script type="text/javascript" src="js/jquery-1.11.3.min.js"></script> <!-- jQuery api -->
     <script src="js/dataPickerAPI-1.12.1.js" type="text/javascript"></script> <!-- Date picker -->
     <script src="js/bootstrap.js" type="text/javascript"></script> <!-- Bootstrap jQuery -->
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script> <!-- Google charts API -->
+   
     <script src="js/pace.js" type="text/javascript"></script> <!-- Pace js library -->
-    <script src="js/myJS.js" type="text/javascript"></script> <!-- My JS file -->
+    
+    <script type="text/javascript" src="js/indexJS.js"></script> <!-- Script to fetch sensor data from Netatmo -->
+   
   </head>
 <body>
 <div class="container-fluid text-center">
 <div id="imgBanner"> <img src="css/images/logo.png"></div>
-<div id="info"><div class="infoContent"><h3>Productivity Smart Office Sensor Data</h3><p>Please be aware an internet connection is needed when biulding charts. On start-up there are three charts displayed to show you what is available. A Bar chart, Area chart and a Line chart. The first mote on the list is selected for these default charts with five days of data. Use the mouse wheel to zoom in on specific dates and the right-click to reset. When a sensor is removed or added to a chart the view is updated and the charts width is set relative to the window size when it is loaded/updated. To build more charts click on the <b>Open</b> link located to the upper left and select your mote from the table shown. Remembering to keep your dates within the orginal scope of the data retrived from Netatmo.</p><button onclick="closeInfo()">Close</button></div></div>
-<div id="homeBanner"><span class="open" style="float:left;" onclick="openNav()">&#9776; Open</span>Productivity S.O.S. Data</div>
 
-<div id="build">
-<a class="closebtn" onclick="closeNav()">&times;</a>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<i class="glyphicon glyphicon-stats"></i> Build your Graph
-		</div>
-		<div class="panel-body">
-			<form>
-			<div class="form-group">
-				<label>Mote id:</label><br>
-				<input type="text" id='mote' size="15">
-	
-				<label>Start Date:</label>
-				<input type="text" name="start_date" id="start_date" placeholder="(yyyy-mm-dd)" size="15"/>
-		
-				<label>End Date:</label>
-				<input type="text" name="end_date" id="end_date" placeholder="(yyyy-mm-dd)" size="15"/>
-		
-				<label>Select graph type</label><br>
-				<input type="radio" name="graphType" value="ColumnChart" checked="checked"/>Bar Chart
-				<input type="radio" name="graphType" value="AreaChart"/>Area Chart
-				<input type="radio" name="graphType" value="LineChart"/>Line Chart<br>
-			</div>
-			</form>
-			<button id="details" onclick="getData()">Mote Detail & Graph Data</button>
-			<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->
-			<button id="reset" onclick="reset()" style="display: none;">Reset</button>
-		</div>
-	</div>
-
-	<div class="panel panel-default">
-		<div class="panel-heading popup" onclick="starterMesg()">
-		<span class="popuptext" id="myPopup">Click on a Mote ID from the list below to build your chart. Enter the Start and End dates into the fields above and choose the chart type to display!</span>
-			<i class="glyphicon glyphicon-info-sign"></i> <b>Click here for info</b><br> Sensor units & Mote List
-		</div>
-		<div class="panel-body">
-			<div id="motes"></div>
-		</div>
-	</div>
+<div id="homeBanner">Productivity S.O.S. Data</div>
+<div class="jumbotron">
+  <div class="container text-center">    
+    <p>Welcome to the Productivity Smart Office Sensor Data website. Here you can access the data available on your <a href="https://www.netatmo.com/en-GB/product/weather/">Netatmo weather station</a> system. All you need to do is enter your access token below to list the different devices registered to you. Then by entering a date range no greater then four months, you can pull all the data locally to be displayed on the charts page. Make sure your access token is up to date! Click <a href="https://dev.netatmo.com/resources/technical/guides/authentication/refreshingatoken">here</a> to view the steps on how to refresh a token. This website will retrieve all the devices listed under favourites for the users token.</p>
+  </div>
 </div>
-<div class="row graphContainer" id="main"></div>
+<div class="container" id="device_table"></div>
+
+	<form>
+		<div class="form-group">
+		<label>Access Token</label>
+		<input type="text" name="token" id="token" size="50"/>
+    </div>
+  </form>
+    <button id='getNetatmo' onclick="fetchNetatmoData()">List My Netatmo Devices</button>
+  <form>
+  <hr>
+    <div class="form-group" id='dates' style="display: none;">
+		<em><b>The maximun number of months allowed is four</b></em><br><br>
+		<label>Start Date:</label>
+		<input type="text" name="start_date" id="start_date" placeholder="(yyyy-mm-dd)" size="15"/>
+		<label>End Date:</label>
+		<input type="text" name="end_date" id="end_date" placeholder="(yyyy-mm-dd)" size="15"/>
+		</div>
+	</form>
+	<button id='goCharts' onclick="" style="display: none;">Go to charts Page</button>
+  <hr>
 </div>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-

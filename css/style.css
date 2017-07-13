@@ -163,3 +163,9 @@ input {
     width: 80%;
     padding: 20px;
 }
+
+#device_table {
+    margin: 30px auto;
+    width: 50%;
+    
+}
