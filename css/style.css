@@ -71,7 +71,7 @@ input {
 
 /* The actual popup (appears on top) */
 .popup .popuptext {
-    visibility: visible;
+    visibility: hidden;
     width: 160px;
     background-color: #555;
     color: #fff;
@@ -99,7 +99,7 @@ input {
 
 /* Toggle this class when clicking on the popup container (hide and show the popup) */
 .popup .show {
-    visibility: hidden;
+    visibility: visible;
     -webkit-animation: fadeIn 1s;
     animation: fadeIn 1s;
 }
@@ -122,6 +122,10 @@ input {
   perspective: 1000px;
   animation-iteration-count:infinite;
   cursor: pointer;
+}
+
+#netatmo {
+    cursor: pointer;
 }
 
 @keyframes shake {

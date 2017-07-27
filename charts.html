@@ -18,26 +18,26 @@
 <div class="container-fluid text-center">
 <div id="imgBanner"> <img src="css/images/logo.png"></div>
 <div id="info"><div class="infoContent"><h3>Productivity Smart Office Sensor Data</h3><p>Please be aware an internet connection is needed when biulding charts. On start-up there are three charts displayed to show you what is available. A Bar chart, Area chart and a Line chart. The first mote on the list is selected for these default charts with five days of data. Use the mouse wheel to zoom in on specific dates and the right-click to reset. When a sensor is removed or added to a chart the view is updated and the charts width is set relative to the window size when it is loaded/updated. To build more charts click on the <b>Open</b> link located to the upper left and select your mote from the table shown. Remembering to keep your dates within the orginal scope of the data retrived from Netatmo.</p><button onclick="closeInfo()">Close</button></div></div>
-<div id="homeBanner"><span class="open" style="float:left;" onclick="openNav()">&#9776; Open</span>Productivity S.O.S. Data</div>
+<div id="homeBanner"><span class="open" style="float:left;" onclick="openNav()">&#9776; Build new charts</span>Productivity S.O.S. Data<span id="netatmo" style="float:right;" onclick="window.location.href='index.html';">Download new Netatmo Data</span></div>
 
 <div id="build">
 <a class="closebtn" onclick="closeNav()">&times;</a>
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<i class="glyphicon glyphicon-stats"></i> Build your Graph
+			<i class="glyphicon glyphicon-stats"></i> Build your Chart
 		</div>
 		<div class="panel-body">
 			<form>
 			<div class="form-group">
 				<label>Mote id:</label><br>
 				<input type="text" id='mote' size="15">
-	
-				<label>Start Date:</label>
+				<hr>		
+				<label id="sd">Start Date</label>
 				<input type="text" name="start_date" id="start_date" placeholder="(yyyy-mm-dd)" size="15"/>
-		
-				<label>End Date:</label>
+				<hr>		
+				<label id="ed">End Date</label>
 				<input type="text" name="end_date" id="end_date" placeholder="(yyyy-mm-dd)" size="15"/>
-		
+				<hr>		
 				<label>Select graph type</label><br>
 				<input type="radio" name="graphType" value="ColumnChart" checked="checked"/>Bar Chart
 				<input type="radio" name="graphType" value="AreaChart"/>Area Chart

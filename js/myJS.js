@@ -12,8 +12,9 @@ var chartType = 'ColumnChart';
 var graphArrays = {};
 var title;
 var detailContent;
-var defaultStartDate;
-var defaultEndDate;
+var netatmoStartDate;
+var netatmoEndDate;
+var defaultEndDate; //used for the three charts on startup
 var firstMote;
 var defaultContent;
 // When the user clicks on the div containing <b>Click here for info</b>, open the popup text
@@ -98,7 +99,7 @@ function reset() {
         };
         //Loop through every object in the raw data array to get a count per sensor per day
         moteArray.forEach(function(obj) {
-        var d=new Date(defaultStartDate); // set d as defaultStartDate object
+        var d=new Date(netatmoStartDate); // set d as netatmoStartDate
         for(var j=0; j<diffDays; j++) { // ************** loop every day ****************
           for(var x=0;x<motedetail.length;x++) { //loop each sensor name from the motedetail object
             if(new Date(obj.date_time).getDate() ===d.getDate() && obj.sensor_type===motedetail[x].sensor && obj.observation==="1") {
@@ -137,7 +138,7 @@ function reset() {
 // Callback that creates and populates a data table, instantiates the chart, passes in the data and draws it.
 function drawDefaultChart1() {
     //Loop three times to build three charts of bar, area and line charts
-      var start = new Date(defaultStartDate);
+      var start = new Date(netatmoStartDate);
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Date');
       for(var sensors in graphArrays) {
@@ -240,7 +241,7 @@ function drawDefaultChart1() {
 
   function drawDefaultChart2() {
     //Loop three times to build three charts of bar, area and line charts
-      var start = new Date(defaultStartDate);
+      var start = new Date(netatmoStartDate);
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Date');
       for(var sensors in graphArrays) {
@@ -343,7 +344,7 @@ function drawDefaultChart1() {
 
   function drawDefaultChart3() {
     //Loop three times to build three charts of bar, area and line charts
-      var start = new Date(defaultStartDate);
+      var start = new Date(netatmoStartDate);
       var data = new google.visualization.DataTable();
       data.addColumn('date', 'Date');
       for(var sensors in graphArrays) {
@@ -448,11 +449,10 @@ function drawDefaultChart1() {
 //When the charts page is loaded we want to display the list of motes and three charts to the user.
 //HTTP request for mote location using getMotesLoc.php
 window.onload = function() {
-  //clear cookies so google charts will reload callbacks for default charts when user hits refresh
-  sessionStorage.clear();
-  localStorage.clear();
-
   var motesReq = new XMLHttpRequest();
+  //set Netatmo date range as info for users by the date inputs in the build section
+  $('#sd').append(" from: "+localStorage.getItem("startDate"));
+  $('#ed').append(" to: "+localStorage.getItem("endDate"));
   
   motesReq.onload = function() {
     motes =JSON.parse(this.responseText);
@@ -481,22 +481,19 @@ window.onload = function() {
 
   //*******************************************************************************************************
   //Setup default display of three graph types for 5 days on the first mote
-  //First set the dates and the mote as the first from the list.  
-  if(defaultStartDate) { //If start Date set for restful request set defailt endDate to + five days.
-    defaultEndDate = new Date(defaultStartDate);
+  //First set the dates and the mote as the first from the list.
+  netatmoStartDate = new Date(localStorage.getItem("startDate"));
+  netatmoEndDate = new Date(localStorage.getItem("endDate"));
+  if(netatmoStartDate) { //If start Date set for restful request set defailt endDate to + five days.
+    defaultEndDate = new Date(netatmoStartDate);
     defaultEndDate.setDate(defaultEndDate.getDate()+5);
-    document.cookie = "startDate="+defaultStartDate.getFullYear()+"-"+(defaultStartDate.getMonth()+1)+"-"+defaultStartDate.getDate()+";";
+    document.cookie = "startDate="+netatmoStartDate.getFullYear()+"-"+(netatmoStartDate.getMonth()+1)+"-"+netatmoStartDate.getDate()+";";
     document.cookie = "endDate="+defaultEndDate.getFullYear()+"-"+(defaultEndDate.getMonth()+1)+"-"+defaultEndDate.getDate()+";";
     document.cookie = "mote="+firstMote+";";
-    diffDays = Math.round(Math.abs((defaultStartDate.getTime() - defaultEndDate.getTime())/(oneDay))); //Get the # of days from start and end dates
-  } else { // Normally a error will be posted to the user and no default data shown. Still in development mode as no data from RESTful API as yet, instead from DB So manually entering following dates
-    defaultStartDate = new Date('2016-09-01');
-    defaultEndDate = new Date(defaultStartDate);
-    defaultEndDate.setDate(defaultEndDate.getDate()+5);
-    document.cookie = "startDate=2016-09-01;";
-    document.cookie = "endDate=2016-09-06;";
-    document.cookie = "mote="+firstMote+";";
-    diffDays = Math.round(Math.abs((defaultStartDate.getTime() - defaultEndDate.getTime())/(oneDay))); //Get the # of days from start and end dates
+    diffDays = Math.round(Math.abs((netatmoStartDate.getTime() - defaultEndDate.getTime())/(oneDay))); //Get the # of days from start and end dates
+  } else {
+    alert("You need to download data from Netatmo below you can build charts\nYou will now be redirected to the home page");
+    window.location.href='index.html';
   }
   //Second get the details for the mote with dates - HTTP request for mote details using get_details.php
   var defaultDetailReq = new XMLHttpRequest();
@@ -509,7 +506,7 @@ window.onload = function() {
       var sensor = motedetail[i];
       defaultContent += "<tr><td>"+sensor.sensor+"</td><td>"+sensor.MinVal+"</td><td>"+sensor.MaxVal+"</td></tr>";
     }
-    var start = defaultStartDate.toDateString();
+    var start = netatmoStartDate.toDateString();
     var end = defaultEndDate.toDateString();
     defaultContent += "<tr><th colspan='3'>startDate</th></tr><tr><td colspan='3 style='padding: 5px;'>"+start+"</td></tr><tr><th colspan='3'>End Date</th></tr><tr><td colspan='3' style='padding: 5px;'>"+end+"</td></tr></tbody></table>";
 
@@ -548,8 +545,8 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   endDate = new Date($('#end_date').val());
   chartType = $('input:checked').val(); // Get chart type from user
   diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime())/(oneDay))); //Get the # of days from start and end dates
-  if(diffDays>61 | diffDays<2) {
-    alert("Date rage allowed is minimun 2 and maximun 60 days. Current range is "+diffDays+" Days!!");
+  if(diffDays<2 || startDate < netatmoStartDate || endDate > netatmoEndDate || startDate > endDate ) {
+    alert("Date rage allowed is minimun 2 Days beteen "+localStorage.getItem("startDate")+" and "+localStorage.getItem("endDate")+"\nPlease check you date and try again!!");
   }
   else if(mote && !isNaN(startDate.getDate()) && !isNaN(endDate.getDate())) { // start and end dates checked for date value which ensures valid date object
   //set up variables as cookies for get_detail and get_data php scripts with 1 day expirey
@@ -666,7 +663,7 @@ else {
   $("#reset").toggle(); //show the reset button  
   } // end of if statment to check date and mote from user inputs.
   else {
-    alert("Please check you have entered a mote_id and start/end dates as 'yyyy-mm-dd' with the option of time as 'yyyy-mm-dd hh:mm'. Date Range must beless then two months!!");
+    alert("Please check you have entered a mote_id and start/end dates as 'yyyy-mm-dd' with the option of time as 'yyyy-mm-dd hh:mm'.");
   }
 }; // end of get data function
 

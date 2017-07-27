@@ -1,11 +1,15 @@
 <?php
-// This script performs a select query to the insight table.
-
 //connect to the database - hint: require       
 //require ('insightDBaccess.php'); // Connect to the db.
 
 $devices = jsonString2Obj($_POST['json']);
 
+
+function jsonString2Obj($str) {
+    return json_decode(stripslashes($str));
+};
+
+//echo "devices = " . json_decode($devices);
 //connect to the database - hint: require       
 require ('insightDBaccess.php'); // Connect to the db as $dbc
 //empty the tables for new data to avoid duplicates***************************************
@@ -25,8 +29,19 @@ $r1 = @mysqli_query ($dbc, $empty1);
 if($r1) {
     echo "Sensor Table (modality) wiped!!\n";
 } else {
-    echo "Error: " . $r . "\n" . $dbc->error;
+    echo "Error: " . $r1 . "\n" . $dbc->error;
 }
+
+//empty the sensor_data table for new data to avoid duplicates***************************************
+$empty2 = "TRUNCATE TABLE sensor_data;";
+$r2 = @mysqli_query ($dbc, $empty2);
+
+if($r2) {
+    echo "Messurement Table (sensor_data) wiped!!\n";
+} else {
+    echo "Error: " . $r2 . "\n" . $dbc->error;
+}
+
 
 //Populate the tables Mote and modality ***************************************************
 $sqlDevices = 'insert into mote (id, location) values ';
@@ -71,27 +86,8 @@ if ($dbc->multi_query($unitSql) === TRUE) {
     echo "Error: " . $query . "\n" . $dbc->error;
 }
 
+
 mysqli_close($dbc);
-
-/*
-echo $devices;
-
-foreach ($devices as $obj) {
-    echo $obj->Device_id ."  ". $obj->Floor. "   ".$obj->Location."   "."\n";
-    foreach ($obj->Sensors as $array) {
-        echo $array."\n";
-    }
-    echo $obj->Module_id0."  ".$obj->Module_Location0."\n";
-    foreach ($obj->Module_Sensors0 as $marray) {
-        echo $marray."\n";
-    }
-};
-*/
-function jsonString2Obj($str) {
-    return json_decode(stripslashes($str));
-};
-
- 
 //quit the script - exit();
     exit();
 ?>

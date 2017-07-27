@@ -23,10 +23,11 @@
 <div id="homeBanner">Productivity S.O.S. Data</div>
 <div class="jumbotron">
   <div class="container text-center">    
-    <p>Welcome to the Productivity Smart Office Sensor Data website. Here you can access the data available on your <a href="https://www.netatmo.com/en-GB/product/weather/">Netatmo weather station</a> system. All you need to do is enter your access token below to list the different devices registered to you. Then by entering a date range no greater then four months, you can pull all the data locally to be displayed on the charts page. Make sure your access token is up to date! Click <a href="https://dev.netatmo.com/resources/technical/guides/authentication/refreshingatoken">here</a> to view the steps on how to refresh a token. This website will retrieve all the devices listed under favourites for the users token.</p>
+    <p>Welcome to the Productivity Smart Office Sensor Data website. Here you can access the data available on your <a href="https://www.netatmo.com/en-GB/product/weather/">Netatmo account</a>. Enter your access token below to list the different devices registered to you. Then by entering a date range within the selected scale limit, you can retreive and store the data locally to be displayed on the charts page. Make sure your access token is up to date! Click <a href="https://dev.netatmo.com/resources/technical/guides/authentication/refreshingatoken">here</a> to view the steps on how to refresh a token. This website will retrieve all the devices listed under the users access tokens favourites.</p>
   </div>
 </div>
 <div class="container" id="device_table"></div>
+<div class="container" id="deviceRecords"></div>
 
 	<form>
 		<div class="form-group">
@@ -34,18 +35,26 @@
 		<input type="text" name="token" id="token" size="50"/>
     </div>
   </form>
-    <button id='getNetatmo' onclick="fetchNetatmoData()">List My Netatmo Devices</button>
+    <button id='getNetatmo' onclick="fetchNetatmoDevices()">List My Netatmo Devices</button>
   <form>
   <hr>
     <div class="form-group" id='dates' style="display: none;">
-		<em><b>The maximun number of months allowed is four</b></em><br><br>
+		<em id="dateRange"><p><b>Keep date range within  the max scale range!! Minimun of three days required!!</b></p></em>
 		<label>Start Date:</label>
 		<input type="text" name="start_date" id="start_date" placeholder="(yyyy-mm-dd)" size="15"/>
 		<label>End Date:</label>
-		<input type="text" name="end_date" id="end_date" placeholder="(yyyy-mm-dd)" size="15"/>
+		<input type="text" name="end_date" id="end_date" placeholder="(yyyy-mm-dd)" size="15"/><hr>
+    <label>Scale (Max date range):</label>
+    <select id="scale">
+      <option value="30min">30min (20days)</option>
+      <option value="1hour">One Hour (40days)</option>
+      <option value="3hours" selected>Three Hours (4months)</option>
+      <option value="1day">One Day (3years)</option>
+    </select>
 		</div>
 	</form>
-	<button id='goCharts' onclick="" style="display: none;">Go to charts Page</button>
+	<button id='goCharts' onclick="fetchNetatmoValues()" style="display: none;">Download sensor data</button>
+  <button id='chartsPage' onclick="window.location.href='charts.html';" style="display: none;">Go to Charts Page</button>
   <hr>
 </div>
 
