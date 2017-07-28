@@ -19,6 +19,41 @@ $(function() {
   $("#start_date").datepicker();
   $("#end_date").datepicker();
 });
+//Get an access token using the user details entered in the form
+$(function() {
+    $('#getAccessToken').submit(function(event) {
+        // Stop form from submitting normally
+        event.preventDefault();
+        var flag = true;
+        var message ='';
+        //check all inputs are filled.
+        $('.getToken').filter(function() {
+            if (this.value == '') {
+                message += "Empty input field: "+this.name+"\n";
+                flag = false;
+            }
+        })
+        if(flag) {
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: 'https://api.netatmo.com/oauth2/token',
+                data: { grant_type: 'refresh_token',
+                        client_id: $(this).find('#client_id').val(),
+                        client_secret: $(this).find('#client_secret').val(),
+                        refresh_token: $(this).find('#refresh_token').val()
+                    },
+                success: function(data) {
+                    $('#token').val(data.access_token);
+                    $('.getToken').val('');
+                },
+                error: function (data, status, err) {
+                    alert(err+"\n"+data.responseText);
+                }
+            });
+        } else {alert(message);}
+    });
+});
 //Get device data from netatmo via users access token***********************
 function fetchNetatmoDevices() {
     var getstationsdata = "https://api.netatmo.com/api/getstationsdata?get_favorites=true&access_token=";
@@ -99,6 +134,7 @@ function populateTable(data) {
     $('#device_table').append(table);
     $('#dates').show();
     $('#goCharts').show();
+    $("#device_table")[0].scrollIntoView();
 };
 //Convert Devices data object to PHP object *************
 function jsObj2phpObj(object) {

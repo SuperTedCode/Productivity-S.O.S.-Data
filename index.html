@@ -26,20 +26,40 @@
     <p>Welcome to the Productivity Smart Office Sensor Data website. Here you can access the data available on your <a href="https://www.netatmo.com/en-GB/product/weather/">Netatmo account</a>. Enter your access token below to list the different devices registered to you. Then by entering a date range within the selected scale limit, you can retreive and store the data locally to be displayed on the charts page. Make sure your access token is up to date! Click <a href="https://dev.netatmo.com/resources/technical/guides/authentication/refreshingatoken">here</a> to view the steps on how to refresh a token. This website will retrieve all the devices listed under the users access tokens favourites.</p>
   </div>
 </div>
-<div class="container" id="device_table"></div>
-<div class="container" id="deviceRecords"></div>
-
-	<form>
-		<div class="form-group">
-		<label>Access Token</label>
+<div class="row">
+<div class="col-md-6">
+<!-- input for netatmo access token -->
+	<form id="accessToken">
+		<div class="form-group row">
+		<label for="token">Access Token</label><br>
 		<input type="text" name="token" id="token" size="50"/>
     </div>
   </form>
     <button id='getNetatmo' onclick="fetchNetatmoDevices()">List My Netatmo Devices</button>
+</div>
+<div class="col-md-6">
+<!-- inputs to create post request to netatmo to fetch access token -->
+  <form id="getAccessToken">
+    <div class="form-group row">
+    <label for="client_id" class="col-form-label">client_id</label><br>
+    <input type="text" class="getToken" name="client_id" id="client_id" size="50"/>
+    <hr>
+    <label for="client_secret" class="col-form-label">client_secret</label><br>
+    <input type="password" class="getToken" name="client_secret" id="client_secret" size="50"/>
+    <hr>
+    <label for="refresh_token" class="col-form-label">refresh_token</label><br>
+    <input type="text" class="getToken" name="refresh_token" id="refresh_token" size="50"/>
+    </div>
+    <button id='access_token' type='submit'>Get Access Token</button>
+  </form>
+</div>
+</div>
+<div class="container" id="device_table"></div>
+<div class="container" id="deviceRecords"></div>
   <form>
   <hr>
     <div class="form-group" id='dates' style="display: none;">
-		<em id="dateRange"><p><b>Keep date range within  the max scale range!! Minimun of three days required!!</b></p></em>
+		<em id="dateRange"><p><b>Keep date range within the max scale range!! Minimun of three days required!!</b></p></em>
 		<label>Start Date:</label>
 		<input type="text" name="start_date" id="start_date" placeholder="(yyyy-mm-dd)" size="15"/>
 		<label>End Date:</label>

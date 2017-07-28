@@ -545,7 +545,7 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   endDate = new Date($('#end_date').val());
   chartType = $('input:checked').val(); // Get chart type from user
   diffDays = Math.round(Math.abs((startDate.getTime() - endDate.getTime())/(oneDay))); //Get the # of days from start and end dates
-  if(diffDays<2 || startDate < netatmoStartDate || endDate > netatmoEndDate || startDate > endDate ) {
+  if(diffDays<2 || diffDays > 65 || startDate < netatmoStartDate || endDate > netatmoEndDate || startDate > endDate ) {
     alert("Date rage allowed is minimun 2 Days beteen "+localStorage.getItem("startDate")+" and "+localStorage.getItem("endDate")+"\nPlease check you date and try again!!");
   }
   else if(mote && !isNaN(startDate.getDate()) && !isNaN(endDate.getDate())) { // start and end dates checked for date value which ensures valid date object
