@@ -17,8 +17,15 @@
 <body>
 <div class="container-fluid text-center">
 <div id="imgBanner"> <img src="css/images/logo.png"></div>
-<div id="info"><div class="infoContent"><h3>Productivity Smart Office Sensor Data</h3><p>Please be aware an internet connection is needed when biulding charts. On start-up there are three charts displayed to show you what is available. A Bar chart, Area chart and a Line chart. The first mote on the list is selected for these default charts with five days of data. Use the mouse wheel to zoom in on specific dates and the right-click to reset. When a sensor is removed or added to a chart the view is updated and the charts width is set relative to the window size when it is loaded/updated. To build more charts click on the <b>Open</b> link located to the upper left and select your mote from the table shown. Remembering to keep your dates within the orginal scope of the data retrived from Netatmo.</p><button onclick="closeInfo()">Close</button></div></div>
-<div id="homeBanner"><span class="open" style="float:left;" onclick="openNav()">&#9776; Build new charts</span>Productivity S.O.S. Data<span id="netatmo" style="float:right;" onclick="window.location.href='index.html';">Download new Netatmo Data</span></div>
+<div id="info"><div class="infoContent"><h2>Productivity Smart Office Sensor Data</h2>
+<ul style="text-align: left; line-height: 2;">
+	<li>An <b>internet connection</b> is required when biulding charts. Three charts are displayed by default: Bar chart, Area chart and a Line chart.</li>
+	<li>Use the mouse wheel to <b>zoom in on a chart</b> for specific dates. Right-click to reset. Sensors can be removed or added from a chart.</li>
+	<li>For new charts click on the <b>Build new charts</b> link located to the upper left.</li>
+	<li>Remember to keep your <b>dates within the orginal scope</b> of the data retrived from Netatmo.</li>
+</ul>
+<button onclick="closeInfo()">Close</button></div></div>
+<div id="homeBanner" style="font-size: 23px;"><span class="open" style="float:left;" onclick="openNav()">&#9776; Build new charts</span>Productivity S.O.S. Data<span id="netatmo" style="float:right;" onclick="window.location.href='index.html';">Download new Netatmo Data</span></div>
 
 <div id="build">
 <a class="closebtn" onclick="closeNav()">&times;</a>
@@ -29,8 +36,7 @@
 		<div class="panel-body">
 			<form>
 			<div class="form-group">
-				<label>Mote id:</label><br>
-				<input type="text" id='mote' size="15">
+				<input type="text" id='mote' size="15" style="display: none;">
 				<hr>		
 				<label id="sd">Start Date</label>
 				<input type="text" name="start_date" id="start_date" placeholder="(yyyy-mm-dd)" size="15"/>
@@ -44,7 +50,7 @@
 				<input type="radio" name="graphType" value="LineChart"/>Line Chart<br>
 			</div>
 			</form>
-			<button id="details" onclick="getData()">Mote Detail & Graph Data</button>
+			<button id="details" onclick="getData()">Device Detail & Graph Data</button>
 			<button id="draw" onclick="submit()" style="display: none;">Draw Graph</button> <!-- on start up we do not want this button to show as there is no data to draw. Once data is retreived the button is toggeled to show in myJS -->
 			<button id="reset" onclick="reset()" style="display: none;">Reset</button>
 		</div>
@@ -52,8 +58,8 @@
 
 	<div class="panel panel-default">
 		<div class="panel-heading popup" onclick="starterMesg()">
-		<span class="popuptext" id="myPopup">Click on a Mote ID from the list below to build your chart. Enter the Start and End dates into the fields above and choose the chart type to display!</span>
-			<i class="glyphicon glyphicon-info-sign"></i> <b>Click here for info</b><br> Sensor units & Mote List
+		<span class="popuptext" id="myPopup">Click on a device from the list below to build your chart. Enter the Start and End dates into the fields above and choose the chart type to display!</span>
+			<i class="glyphicon glyphicon-info-sign"></i> <b>Click here for info</b><br> Sensor units & Device List
 		</div>
 		<div class="panel-body">
 			<div id="motes"></div>

@@ -5,7 +5,7 @@ body {
 
 #homeBanner {
 	background-color: #66a3ff;
-	height: 45px;
+	height: 80px;
 	padding: 10px;
 	margin: 10px;
 	font-weight: bold;
@@ -36,6 +36,9 @@ body {
     cursor: pointer;
 }
 
+#netatmoInfoLink {
+    cursor: pointer;
+}
 
 table, th, td {
   border: 1px solid black;

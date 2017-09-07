@@ -19,6 +19,7 @@ $(function() {
   $("#start_date").datepicker();
   $("#end_date").datepicker();
 });
+
 //Get an access token using the user details entered in the form
 $(function() {
     $('#getAccessToken').submit(function(event) {
@@ -116,9 +117,9 @@ function populateTable(data) {
         var ed = new Date(data[i].last_store*1000);
         var start = st.toUTCString();
         var end = ed.toUTCString();
-        table+="<tr><th colspan='"+(modules+1)+"'>"+data[i].Floor+"</th></tr><tr><td>Setup: "+start+"</td><td>Last Data: "+end+"</td></tr><tr><td>Device id:"+data[i].DevicePK+" - "+data[i].Location+"</td>";
+        table+="<tr><th colspan='"+(modules+1)+"'>"+data[i].Floor+"</th></tr><tr><td>Setup: "+start+"</td><td>Last Data: "+end+"</td></tr><tr><td>"+data[i].Location+"</td>";
         for(var j=0;j<modules;j++) {
-            table+="<td>Module id:"+data[i].Module_PK+" - "+data[i]["Module_Location"+j]+"</td>";
+            table+="<td>"+data[i]["Module_Location"+j]+"</td>";
         }
         table+="</tr>";
         if(st.getTime() < maxSt) {
@@ -187,7 +188,7 @@ function fetchNetatmoValues() {
     var moteId = "";
     urlArray = [];
     var urlObj = {};
-    if(st > maxSt && ed < maxEd && numDays > 2 && scaleDays > numDays && !isNaN(st.getDate()) && !isNaN(ed.getDate())) {
+    if(st > maxSt && ed < maxEd && numDays > 2 && scaleDays > numDays && !isNaN(st.getDate()) && !isNaN(ed.getDate()) && st < ed) {
         st = st.getTime()/1000;
         ed = ed.getTime()/1000;
         var getmeasure = "https://api.netatmo.com/api/getmeasure?access_token="+token+"&scale="+scale+"&date_begin="+st+"&date_end="+ed;
@@ -221,6 +222,9 @@ function fetchNetatmoValues() {
             }
         };
     } else {
+        if(st > ed) {
+            numDays *= -1;//change the numdays variable to show minus
+        }
         alert("Please enter a date range within the Scale limit and ensure the start and end dates are within the min(setup) and max(last Data) range of the Devices!!!\nScale is currently set at "+scaleDays+" days\nCurrent date range is "+numDays+" days");
     }
     //Setup localstorage for charts page default display
@@ -230,19 +234,24 @@ function fetchNetatmoValues() {
 
 // loop each xhr request
 function ajaxLoop(x) {
+    Pace.restart();
     xhr[x].onreadystatechange = function() {
+    try {
     //4:request finished and response is ready / 200: "OK"
     if (xhr[x].readyState == 4 && xhr[x].status == 200) {
         sensorDataWrapper(xhr[x].responseText, urlKeys);
     } else if(xhr[x].readyState == 4 && xhr[x].status == 403) {
             alert(xhr[x].status+xhr[x].responseText);//alerts if access token failed
         }
+    }
+    catch(e) {
+        alert("Error! "+xhr[x].status+": "+xhr[x].responseText+"\nPlease try again")
+    }
     };
 };
 
 
 function sensorDataWrapper(response,deviceKeys) {
-    Pace.restart();
     var netatmoData=JSON.parse(response);
     if(netatmoData.body[0] != undefined) {
         var step_time = netatmoData.body[0].step_time;
@@ -299,7 +308,23 @@ function sensorDataWrapper(response,deviceKeys) {
         }
         
         var json = jsObj2phpObj(sensorData);//convert obj to JSON
+        //sest cookie for device id to populate take
         document.cookie = "device="+deviceKeys[count];
+
+        //set cookie for device name to inform user what device was loaded to db
+        for (var i=0; i<floors.length; i++) {
+
+            if (floors[i].DevicePK == deviceKeys[count]) {
+                document.cookie = "deviceName="+floors[i].Location;
+            }
+
+            if (floors[i].Module_PK == deviceKeys[count]) {
+                document.cookie = "deviceName="+floors[i].Module_Location0;
+            }
+
+            //document.cookie = "deviceName="+deviceKeys[count];
+        };
+
         $.post("php/insertSensorData.php",{json:json}, function(data) {
             $('#deviceRecords').append(data);
             count++
@@ -308,13 +333,14 @@ function sensorDataWrapper(response,deviceKeys) {
                 ajaxLoop(count);
             } else { // reset after all ajax requests have been processed so user can resend.
                 count=0;
+                $('#deviceRecords').append("<b>No more devices</b>")
                 if(!$("#chartsPage").is(":visible")) {
                     $("#chartsPage").toggle();
                 }
             }
         });
     } else {
-        alert("Netatmo failed to return data for id:"+deviceKeys[count]);
+        //alert("Netatmo failed to return data for id:"+deviceKeys[count]);
         $('#deviceRecords').append("<p style='color:red;'>Netatmo failed to return data for device/module id "+deviceKeys[count]+"</p>");
         count++
         if(count<xhr.length) {
@@ -322,7 +348,10 @@ function sensorDataWrapper(response,deviceKeys) {
             ajaxLoop(count);
         } else {
             count =0;
-            $("#chartsPage").toggle();
+            $('#deviceRecords').append("<b>No more devices</b>")
+            if(!$("#chartsPage").is(":visible")) {
+                    $("#chartsPage").toggle();
+                }
         }
     }
 };

@@ -4,6 +4,7 @@
 
 $sensors = jsonString2Obj($_POST['json']);
 $device = $_COOKIE["device"];
+$deviceName = $_COOKIE["deviceName"];
 
 function jsonString2Obj($str) {
     return json_decode(stripslashes($str));
@@ -18,7 +19,7 @@ if($device == 1) {//empties table on first run which is xhr[0] and device = 1
 	$r = @mysqli_query ($dbc, $empty);
 
 	if($r) {
-	    echo "Messurement Table (sensor_data) wiped!!\n";
+	    echo "<b>Messurement Table (sensor_data) wiped!!</b>\n";
 	} else {
 	    echo "Error: " . $r . "\n" . $dbc->error;
 	}
@@ -47,14 +48,14 @@ $query .= ';';
 if($device>9) {
 	$r1 = @mysqli_query ($dbc, $query);
 	if($r1) {
-	    echo "<p>Sensor values inserted for Module id: ".$device."</p>";
+	    echo "<p>Sensor values inserted for ".$deviceName."</p>";
 	} else {
 	    echo "Error: " . $r1 . "\n" . $dbc->error;
 	}
 } else {
 	$r1 = @mysqli_query ($dbc, $query);
 	if($r1) {
-	    echo "<p>Sensor values inserted for device id: ".$device."</p>";
+	    echo "<p>Sensor values inserted for ".$deviceName."</p>";
 	} else {
 	    echo "Error: " . $r1 . "\n" . $dbc->error;
 	}

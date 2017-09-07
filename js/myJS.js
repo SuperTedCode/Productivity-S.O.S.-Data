@@ -83,10 +83,6 @@ function reset() {
             title = motes[i].location;
           }
         };
-        if(title) {
-          title += " (mote id "+firstMote+")";
-        }
-        else { title = "(mote id "+firstMote+")";};
         graphArrays = {}; // reset needed for each new graph.
         // Create object with properties named after each sensor with a value of an array of length equal to days in user input
         for(var i=0;i<motedetail.length;i++) {
@@ -446,7 +442,7 @@ function drawDefaultChart1() {
   }; // end of DrawDefaultChart3 func line chart
 
 //*************************************************************************************************************************
-//When the charts page is loaded we want to display the list of motes and three charts to the user.
+//When the charts page is loaded we want to display the list of Devices and three charts to the user.
 //HTTP request for mote location using getMotesLoc.php
 window.onload = function() {
   var motesReq = new XMLHttpRequest();
@@ -460,15 +456,15 @@ window.onload = function() {
     var content = "<table><tbody><tr><th colspan='2'>Sensor types</th></tr><tr><th>Name</th><th>Unit</th></tr>";
     for (var i=0;i<motes.length;i++) {
       if(motes[i].name){ //filter out the objects in the array for sensor name and unit
-        content += "<tr><td>"+motes[i].name+"</td><td>"+motes[i].unit+"</td><tr>";
+        content += "<tr><td>"+motes[i].name+"</td><td>"+motes[i].unit+"</td></tr>";
       }
     };
 
-    content += "<tr><th colspan='2'>Mote List</th></tr><tr><th>location</th><th>Mote ID</th></tr>"; // Add seperate headings for mote locations
+    content += "<tr><th colspan='2'>Device List & location</th></tr>"; // Add seperate headings for mote locations
     var moteCount = 0;
     for (var i=0;i<motes.length;i++) {
       if(motes[i].mote){ //Filter out the objexts in the array for mote id and location
-        content += "<tr><td>"+motes[i].location+"</td><td onclick='getMoteID("+motes[i].mote+")' class='mote'>"+motes[i].mote+"</td><tr>";
+        content += "<tr><td colspan='2' onclick='getMoteID("+motes[i].mote+")' class='mote'>"+motes[i].location+"</td></tr>";
         //loop to get the first mote id returned for default display.    
         if(moteCount<1) {
           moteCount++;
@@ -500,7 +496,7 @@ window.onload = function() {
   
   defaultDetailReq.onload = function() {
     motedetail =JSON.parse(this.responseText);
-    defaultContent = "<table><tbody><tr><th>mote id "+firstMote+"</th><th>MinVal</th><th>MaxVal</th></tr>";
+    defaultContent = "<table><tbody><tr><th>Sensors</th><th>MinVal</th><th>MaxVal</th></tr>";
     // Loop through the array to create the table rows in HTML
     for (var i=0;i<motedetail.length;i++) {
       var sensor = motedetail[i];
@@ -563,7 +559,7 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
   
   detailReq.onload = function() {
     motedetail =JSON.parse(this.responseText);
-    detailContent = "<table><tbody><tr><th>mote id "+mote+"</th><th>MinVal</th><th>MaxVal</th></tr>";
+    detailContent = "<table><tbody><tr><th>Sensors</th><th>MinVal</th><th>MaxVal</th></tr>";
     // Loop through the array to create the table rows in HTML
     for (var i=0;i<motedetail.length;i++) {
       var sensor = motedetail[i];
@@ -593,11 +589,6 @@ function getData() { // Function called when user hits butoon "Get Mote Details 
       title = motes[i].location;
     }
   };
-
-  if(title) {
-    title += " (mote id "+mote+")";
-  } else { title = "(mote id "+mote+")";};
-
 //******************************************************************************************************************************
 // Create object with properties named after each sensor with a value of an array of length equal to days in user input
   graphArrays = {}; // reset needed for each new graph.
@@ -663,7 +654,7 @@ else {
   $("#reset").toggle(); //show the reset button  
   } // end of if statment to check date and mote from user inputs.
   else {
-    alert("Please check you have entered a mote_id and start/end dates as 'yyyy-mm-dd' with the option of time as 'yyyy-mm-dd hh:mm'.");
+    alert("Please check you have first selected a Device and start/end dates as 'yyyy-mm-dd' with the option of time as 'yyyy-mm-dd hh:mm'.");
   }
 }; // end of get data function
 
@@ -750,7 +741,9 @@ Pace.restart();
                 0: {title:'Sensor counter & Avg'}
             },
             explorer: {
-                axis: 'horizontal'
+                axis: 'horizontal',
+                actions: ['dragToZoom', 'rightClickToReset'],
+                keepInBounds: true
             }
         }
     });

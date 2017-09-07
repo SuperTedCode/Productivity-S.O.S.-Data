@@ -20,10 +20,23 @@
 <div class="container-fluid text-center">
 <div id="imgBanner"> <img src="css/images/logo.png"></div>
 
-<div id="homeBanner">Productivity S.O.S. Data</div>
+<div id="homeBanner"><h1>Productivity S.O.S. Data</h1></div>
+
+<div id="NetatmoPopup" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">Enter your access token below to list the different devices registered to you. Then by entering a date range within the selected scale limit, you can retreive and store the data locally to be displayed on the charts page. Click <a href="https://dev.netatmo.com/resources/technical/guides/authentication/refreshingatoken">here</a> to learn more about Netatmo authentication. This website will retrieve all the devices listed against the users access tokens.</div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="jumbotron">
   <div class="container text-center">    
-    <p>Welcome to the Productivity Smart Office Sensor Data website. Here you can access the data available on your <a href="https://www.netatmo.com/en-GB/product/weather/">Netatmo account</a>. Enter your access token below to list the different devices registered to you. Then by entering a date range within the selected scale limit, you can retreive and store the data locally to be displayed on the charts page. Make sure your access token is up to date! Click <a href="https://dev.netatmo.com/resources/technical/guides/authentication/refreshingatoken">here</a> to view the steps on how to refresh a token. This website will retrieve all the devices listed under the users access tokens favourites.</p>
+    <p>Welcome to the Productivity Smart Office Sensor Data website. Here you can access the data available on your <a href="https://www.netatmo.com/en-GB/product/weather/">Netatmo account</a> by entering your access token below.</p>
+    <div id="netatmoInfoLink"><span data-toggle="modal" data-target="#NetatmoPopup"><i class="glyphicon glyphicon-info-sign"></i> Click here for more info!</span></div>
   </div>
 </div>
 <div class="row">
